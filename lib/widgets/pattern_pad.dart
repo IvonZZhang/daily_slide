@@ -7,6 +7,12 @@ import 'package:daily_slide/models/pattern_model.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
 
+final Paint lineIndicatorPaint = Paint()
+          ..color = Colors.black87
+          ..style = PaintingStyle.fill
+          ..strokeCap = StrokeCap.round
+          ..strokeWidth = 4;
+
 Offset calcCirclePosition(
     int n, Size size, int dimension, double relativePadding) {
   final o = size.width > size.height
@@ -21,6 +27,21 @@ Offset calcCirclePosition(
             (dimension - 1 + relativePadding * 2) *
             (n ~/ dimension + relativePadding),
       );
+}
+
+void drawLineSegmentWithArrow(Canvas canvas, Offset p1, Offset p2, bool horizontal, {double arrowLength=10}) {
+  canvas.drawLine(p1, p2, lineIndicatorPaint);
+  if (horizontal) {
+    canvas.drawLine(p1, p1 + Offset(arrowLength, arrowLength), lineIndicatorPaint);
+    canvas.drawLine(p1, p1 + Offset(arrowLength, -arrowLength), lineIndicatorPaint);
+    canvas.drawLine(p2, p2 + Offset(-arrowLength, arrowLength), lineIndicatorPaint);
+    canvas.drawLine(p2, p2 + Offset(-arrowLength, -arrowLength), lineIndicatorPaint);
+  } else {
+    canvas.drawLine(p1, p1 + Offset(arrowLength, arrowLength), lineIndicatorPaint);
+    canvas.drawLine(p1, p1 + Offset(-arrowLength, arrowLength), lineIndicatorPaint);
+    canvas.drawLine(p2, p2 + Offset(arrowLength, -arrowLength), lineIndicatorPaint);
+    canvas.drawLine(p2, p2 + Offset(-arrowLength, -arrowLength), lineIndicatorPaint);
+  }
 }
 
 class PatternPad extends StatefulWidget {
@@ -85,21 +106,31 @@ class _PatternPadState extends State<PatternPad> {
   List<int> used = [];
   Offset? currentPoint;
 
-  ui.Image? rulerImageVertical;
-  ui.Image? rulerImageHorizontal;
+  late Image rulerImageVertical;
+  late Image rulerImageHorizontal;
   bool isImageloaded = false;
 
   @override
   void initState() {
     super.initState();
-    initImages();
+    // initImages();
+    rulerImageVertical = Image.asset('assets/ruler.png');
+    rulerImageHorizontal = Image.asset('assets/ruler.png');
   }
 
-  Future initImages() async {
-    final ByteData data = await DefaultAssetBundle.of(context).load('assets/ruler.png');
-    rulerImageVertical = await loadImage(Uint8List.view(data.buffer));
-    rulerImageHorizontal = await rotatedImage(image: rulerImageVertical!, angle: 1.574);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initImages();
+    precacheImage(rulerImageVertical.image, context);
+    precacheImage(rulerImageHorizontal.image, context);
   }
+
+  // Future initImages() async {
+  //   final ByteData data = await DefaultAssetBundle.of(context).load('assets/ruler.png');
+  //   rulerImageVertical = await loadImage(Uint8List.view(data.buffer));
+  //   rulerImageHorizontal = await rotatedImage(image: rulerImageVertical!, angle: 1.574);
+  // }
 
   Future<ui.Image> loadImage(Uint8List img) async {
     final Completer<ui.Image> completer = Completer();
@@ -181,8 +212,8 @@ class _PatternPadState extends State<PatternPad> {
               fillPoints: widget.fillPoints,
               showDiameter: widget.showDiameter,
               showInterdistance: widget.showInterdistance,
-              rulerImageVertical: rulerImageVertical!,
-              rulerImageHorizontal: rulerImageHorizontal!,
+              // rulerImageVertical: rulerImageVertical!,
+              // rulerImageHorizontal: rulerImageHorizontal!,
             ),
             size: Size.infinite,
           );
@@ -206,12 +237,11 @@ class _LockPainter extends CustomPainter {
 
   final Paint circlePaint;
   final Paint selectedPaint;
-  final Paint lineIndicatorPaint;
 
-  final ui.Image rulerImageVertical;
-  final ui.Image rulerImageHorizontal;
+  // final ui.Image rulerImageVertical;
+  // final ui.Image rulerImageHorizontal;
 
-  static const double RULER_IMAGE_RATIO = 1.822;
+  // static const double RULER_IMAGE_RATIO = 1.822;
 
   _LockPainter({
     required this.dimension,
@@ -226,8 +256,6 @@ class _LockPainter extends CustomPainter {
     required bool fillPoints,
     this.showInterdistance = false,
     this.showDiameter = false,
-    required this.rulerImageVertical,
-    required this.rulerImageHorizontal,
   })   : circlePaint = Paint()
           ..color = notSelectedColor
           ..style = fillPoints ? PaintingStyle.fill : PaintingStyle.stroke
@@ -236,12 +264,7 @@ class _LockPainter extends CustomPainter {
           ..color = selectedColor
           ..style = fillPoints ? PaintingStyle.fill : PaintingStyle.stroke
           ..strokeCap = StrokeCap.round
-          ..strokeWidth = strokeWidth,
-        lineIndicatorPaint = Paint()
-          ..color = Colors.black87
-          ..style = PaintingStyle.fill
-          ..strokeCap = StrokeCap.butt
-          ..strokeWidth = 6;
+          ..strokeWidth = strokeWidth;
 
 
 
@@ -282,35 +305,29 @@ class _LockPainter extends CustomPainter {
     }
 
     if (showDiameter) {
-      canvas.drawLine(
-        circlePosition(0) + Offset(-pointRadius, 0),
-        circlePosition(0) + Offset(pointRadius, 0),
-        lineIndicatorPaint,
-      );
-
-      paintImage(
-        canvas: canvas,
-        rect: Rect.fromPoints(circlePosition(0) + Offset(-pointRadius, -pointRadius-(2*pointRadius/RULER_IMAGE_RATIO)),
-                              circlePosition(0) + Offset(pointRadius, (2*pointRadius/RULER_IMAGE_RATIO)-pointRadius)),
-        image: rulerImageHorizontal,
-        fit: BoxFit.fill
+      drawLineSegmentWithArrow(
+        canvas,
+        circlePosition(0) + Offset(-pointRadius, -pointRadius),
+        circlePosition(0) + Offset(pointRadius, -pointRadius),
+        true
       );
     }
 
     if (showInterdistance) {
-      canvas.drawLine(
+      drawLineSegmentWithArrow(
+        canvas,
         circlePosition(0),
         circlePosition(3),
-        lineIndicatorPaint
+        false
       );
 
-      paintImage(
-        canvas: canvas,
-        rect: Rect.fromPoints(circlePosition(0) + Offset(-pointRadius-(4*pointRadius/RULER_IMAGE_RATIO), 0),
-                              circlePosition(3) + Offset(-pointRadius, 0)),
-        image: rulerImageVertical,
-        fit: BoxFit.fill
-      );
+      // paintImage(
+      //   canvas: canvas,
+      //   rect: Rect.fromPoints(circlePosition(0) + Offset(-pointRadius-(4*pointRadius/RULER_IMAGE_RATIO), 0),
+      //                         circlePosition(3) + Offset(-pointRadius, 0)),
+      //   image: rulerImageVertical,
+      //   fit: BoxFit.fill
+      // );
     }
   }
 
