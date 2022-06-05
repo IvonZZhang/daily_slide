@@ -24,18 +24,49 @@ Offset calcCirclePosition(
       );
 }
 
-void drawLineSegmentWithArrow(Canvas canvas, Offset p1, Offset p2, bool horizontal, {double arrowLength=10}) {
+void drawLineSegmentWithArrow(Canvas canvas, Offset p1, Offset p2, bool horizontal, {String labelText="", double arrowLength=10}) {
+  const double labelFontSize = 20;
+
+  const labelStyle = TextStyle(
+    color: Colors.black,
+    fontSize: labelFontSize,
+    fontWeight: FontWeight.bold,
+  );
+
+  final labelSpan = TextSpan(
+    text: labelText,
+    style: labelStyle,
+  );
+
+  final labelPainter = TextPainter(
+    text: labelSpan,
+    textDirection: TextDirection.ltr
+  );
+
+  labelPainter.layout(
+    minWidth: 0,
+    maxWidth: labelFontSize*labelText.length
+  );
+
   canvas.drawLine(p1, p2, lineIndicatorPaint);
   if (horizontal) {
+    // Two arrows
     canvas.drawLine(p1, p1 + Offset(arrowLength, arrowLength), lineIndicatorPaint);
     canvas.drawLine(p1, p1 + Offset(arrowLength, -arrowLength), lineIndicatorPaint);
     canvas.drawLine(p2, p2 + Offset(-arrowLength, arrowLength), lineIndicatorPaint);
     canvas.drawLine(p2, p2 + Offset(-arrowLength, -arrowLength), lineIndicatorPaint);
+
+    // Label text
+    labelPainter.paint(canvas, p1 + Offset(arrowLength - 2, -arrowLength - labelFontSize - 2));
   } else {
+    // Two arrows
     canvas.drawLine(p1, p1 + Offset(arrowLength, arrowLength), lineIndicatorPaint);
     canvas.drawLine(p1, p1 + Offset(-arrowLength, arrowLength), lineIndicatorPaint);
     canvas.drawLine(p2, p2 + Offset(arrowLength, -arrowLength), lineIndicatorPaint);
     canvas.drawLine(p2, p2 + Offset(-arrowLength, -arrowLength), lineIndicatorPaint);
+
+    // Label text
+    labelPainter.paint(canvas, Offset(p1.dx + labelFontSize/2, (p1.dy+p2.dy)/2 - labelFontSize/2));
   }
 }
 
@@ -239,7 +270,8 @@ class _LockPainter extends CustomPainter {
         canvas,
         circlePosition(0) + Offset(-pointRadius, -pointRadius),
         circlePosition(0) + Offset(pointRadius, -pointRadius),
-        true
+        true,
+        labelText: "1 cm",
       );
     }
 
@@ -248,7 +280,8 @@ class _LockPainter extends CustomPainter {
         canvas,
         circlePosition(0),
         circlePosition(3),
-        false
+        false,
+        labelText: "1.3 cm",
       );
     }
   }
