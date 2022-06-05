@@ -1,11 +1,6 @@
-import 'dart:async';
-import 'dart:math';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:daily_slide/models/pattern_model.dart';
 import 'package:provider/provider.dart';
-import 'dart:ui' as ui;
 
 final Paint lineIndicatorPaint = Paint()
           ..color = Colors.black87
@@ -106,62 +101,6 @@ class _PatternPadState extends State<PatternPad> {
   List<int> used = [];
   Offset? currentPoint;
 
-  late Image rulerImageVertical;
-  late Image rulerImageHorizontal;
-  bool isImageloaded = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // initImages();
-    rulerImageVertical = Image.asset('assets/ruler.png');
-    rulerImageHorizontal = Image.asset('assets/ruler.png');
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // initImages();
-    precacheImage(rulerImageVertical.image, context);
-    precacheImage(rulerImageHorizontal.image, context);
-  }
-
-  // Future initImages() async {
-  //   final ByteData data = await DefaultAssetBundle.of(context).load('assets/ruler.png');
-  //   rulerImageVertical = await loadImage(Uint8List.view(data.buffer));
-  //   rulerImageHorizontal = await rotatedImage(image: rulerImageVertical!, angle: 1.574);
-  // }
-
-  Future<ui.Image> loadImage(Uint8List img) async {
-    final Completer<ui.Image> completer = Completer();
-    ui.decodeImageFromList(img, (ui.Image img) {
-      setState(() {
-        isImageloaded = true;
-      });
-      return completer.complete(img);
-    });
-    return completer.future;
-  }
-
-  Future<ui.Image> rotatedImage({required ui.Image image, required double angle}) {
-    var pictureRecorder = ui.PictureRecorder();
-    Canvas canvas = Canvas(pictureRecorder);
-
-    final double r =
-        sqrt(image.width * image.width + image.height * image.height) / 2;
-    final alpha = atan(image.height / image.width);
-    final gama = alpha + angle;
-    final shiftY = r * sin(gama);
-    final shiftX = r * cos(gama);
-    final translateX = image.width / 2 - shiftX;
-    final translateY = image.height / 2 - shiftY;
-    canvas.translate(translateX, translateY);
-    canvas.rotate(angle);
-    canvas.drawImage(image, Offset.zero, Paint());
-
-    return pictureRecorder.endRecording().toImage(image.width, image.height);
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -212,8 +151,6 @@ class _PatternPadState extends State<PatternPad> {
               fillPoints: widget.fillPoints,
               showDiameter: widget.showDiameter,
               showInterdistance: widget.showInterdistance,
-              // rulerImageVertical: rulerImageVertical!,
-              // rulerImageHorizontal: rulerImageHorizontal!,
             ),
             size: Size.infinite,
           );
@@ -238,11 +175,6 @@ class _LockPainter extends CustomPainter {
   final Paint circlePaint;
   final Paint selectedPaint;
 
-  // final ui.Image rulerImageVertical;
-  // final ui.Image rulerImageHorizontal;
-
-  // static const double RULER_IMAGE_RATIO = 1.822;
-
   _LockPainter({
     required this.dimension,
     required this.used,
@@ -265,8 +197,6 @@ class _LockPainter extends CustomPainter {
           ..style = fillPoints ? PaintingStyle.fill : PaintingStyle.stroke
           ..strokeCap = StrokeCap.round
           ..strokeWidth = strokeWidth;
-
-
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -320,14 +250,6 @@ class _LockPainter extends CustomPainter {
         circlePosition(3),
         false
       );
-
-      // paintImage(
-      //   canvas: canvas,
-      //   rect: Rect.fromPoints(circlePosition(0) + Offset(-pointRadius-(4*pointRadius/RULER_IMAGE_RATIO), 0),
-      //                         circlePosition(3) + Offset(-pointRadius, 0)),
-      //   image: rulerImageVertical,
-      //   fit: BoxFit.fill
-      // );
     }
   }
 
