@@ -20,6 +20,9 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
+  double _diameterSliderValue = 30.0;
+  double _interDistanceSliderValue = 1.0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,13 +82,43 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
                         // crossAxisAlignment: Cross,
                         children: [
                           const Text("Please adjust the diameter to 1 cm."),
-                          Slider(value: 1, onChanged: (double value) {}, )
+                          Builder(
+                            builder: (context) {
+                              return Slider(
+                                min: 10.0,
+                                max: 50.0,
+                                value: _diameterSliderValue,
+                                onChanged: (double value) {
+                                  var patternModel = context.read<PatternModel>();
+                                  patternModel.radius = value;
+                                  setState(() {
+                                    _diameterSliderValue = value;
+                                  });
+                                },
+                              );
+                            }
+                          )
                         ],
                       ),
                       Column( // Page 2: Inter-distance
                         children: [
                           const Text("Please adjust the distance to 1.3 cm."),
-                          Slider(value: 1, onChanged: (double value) {})
+                          Builder(
+                            builder: (context) {
+                              return Slider(
+                                min: 0.1,
+                                max: 4.0,
+                                value: _interDistanceSliderValue,
+                                onChanged: (double value) {
+                                  var patternModel = context.read<PatternModel>();
+                                  patternModel.padding = value;
+                                  setState(() {
+                                    _interDistanceSliderValue = value;
+                                  });
+                                },
+                              );
+                            }
+                          )
                         ],
                       ),
                       Column( // Page 3: Something else

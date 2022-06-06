@@ -176,7 +176,7 @@ class _PatternPadState extends State<PatternPad> {
               relativePadding: patternModel.padding,
               selectedColor: widget.selectedColor ?? Theme.of(context).primaryColor,
               notSelectedColor: widget.notSelectedColor,
-              pointRadius: widget.pointRadius,
+              pointRadius: patternModel.radius,
               strokeWidth: widget.strokeWidth,
               showInput: widget.showInput,
               fillPoints: widget.fillPoints,
