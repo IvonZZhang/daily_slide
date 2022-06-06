@@ -17,6 +17,9 @@ class CalibrationPageWidget extends StatefulWidget {
 class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,16 +49,88 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox.square(
-                  child: const Text("a"),
+                Expanded(
+                  flex: 6,
+                  child: SizedBox.square(
+                    child: PatternPad(
+                      dimension: 3,
+                      relativePadding: 1,
+                      selectedColor: AppThemeData.patternDotSelectedColor,
+                      notSelectedColor: AppThemeData.patternDotNotSelectedColor,
+                      pointRadius: 31.25,
+                      strokeWidth: 10,
+                      showInput: true,
+                      fillPoints: true,
+                      showDiameter: _currentPage==0,
+                      showInterdistance: _currentPage==1,
+                      onInputComplete: (List<int> pattern) =>
+                          debugPrint("pattern is ${pattern.toString()}}"),
+                    ),
+                  ),
                 ),
-                ListView(
-                  children: const [
-                    ListTile(
-                      title: Text("Something"),
-                    )
-                  ],
-                )
+                Expanded(
+                  flex: 3,
+                  child: PageView(
+                    controller: _pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      Column( // Page 1: Diameter
+                        // mainAxisSize: MainAxisSize.min,
+                        // crossAxisAlignment: Cross,
+                        children: [
+                          const Text("Please adjust the diameter to 1 cm."),
+                          Slider(value: 1, onChanged: (double value) {}, )
+                        ],
+                      ),
+                      Column( // Page 2: Inter-distance
+                        children: [
+                          const Text("Please adjust the distance to 1.3 cm."),
+                          Slider(value: 1, onChanged: (double value) {})
+                        ],
+                      ),
+                      Column( // Page 3: Something else
+                        children: [
+                          const Text("Please adjust something else."),
+                          Slider(value: 1, onChanged: (double value) {})
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Ink(
+                        decoration: const ShapeDecoration(
+                          shape: CircleBorder(),
+                          color: Colors.blueGrey,
+                        ),
+                        child: IconButton(
+                          onPressed: (){
+                            _pageController.previousPage(duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
+                            setState(() {
+                              _currentPage--;
+                            });
+                          },
+                          icon: const Icon(Icons.arrow_back),
+                          color: Colors.blueAccent,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: (){
+                          _pageController.nextPage(curve: Curves.easeIn, duration: const Duration(milliseconds: 200));
+                          setState(() {
+                            _currentPage++;
+                          });
+                        },
+                        icon: const Icon(Icons.arrow_forward),
+                        color: Colors.blueAccent,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
