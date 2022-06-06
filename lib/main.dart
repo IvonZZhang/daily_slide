@@ -35,6 +35,7 @@ class DailySlideApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Daily Slide',
+      debugShowCheckedModeBanner: false,
       theme: AppThemeData.lightThemeData,
       darkTheme: AppThemeData.darkThemeData,
       // home: HomePageWidget(key: key),
