@@ -19,6 +19,7 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
 
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  final int _lastPage = 1;
 
   double _diameterSliderValue = 30.0;
   double _interDistanceSliderValue = 1.0;
@@ -75,6 +76,7 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
                   flex: 3,
                   child: PageView(
                     controller: _pageController,
+                    // Disable page navigation via swipe
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
                       Column( // Page 1: Diameter
@@ -137,29 +139,43 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
                     children: [
                       Ink(
                         decoration: const ShapeDecoration(
-                          shape: CircleBorder(),
+                          shape: RoundedRectangleBorder(),
                           color: Colors.blueGrey,
                         ),
-                        child: IconButton(
-                          onPressed: (){
-                            _pageController.previousPage(duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
-                            setState(() {
-                              _currentPage--;
-                            });
-                          },
-                          icon: const Icon(Icons.arrow_back),
-                          color: Colors.blueAccent,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextButton.icon(
+                            onPressed: _currentPage != 0 ? () {
+                              _pageController.previousPage(duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
+                              setState(() {
+                                _currentPage--;
+                              });
+                            } : null,
+                            icon: const Icon(Icons.arrow_back_ios),
+                            label: const Text("PREVIOUS"),
+                          ),
                         ),
                       ),
-                      IconButton(
-                        onPressed: (){
-                          _pageController.nextPage(curve: Curves.easeIn, duration: const Duration(milliseconds: 200));
-                          setState(() {
-                            _currentPage++;
-                          });
-                        },
-                        icon: const Icon(Icons.arrow_forward),
-                        color: Colors.blueAccent,
+                      Ink(
+                        decoration: const ShapeDecoration(
+                          shape: RoundedRectangleBorder(),
+                          color: Colors.blueGrey,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextButton.icon(
+                            onPressed: _currentPage != _lastPage ? () {
+                              _pageController.nextPage(curve: Curves.easeIn, duration: const Duration(milliseconds: 200));
+                              setState(() {
+                                _currentPage++;
+                              });
+                            } : () {
+                              debugPrint("Configuration finished!");
+                            },
+                            icon: const Icon(Icons.arrow_forward_ios),
+                            label: _currentPage == _lastPage ? const Text("FINISH") : const Text("NEXT"),
+                          ),
+                        ),
                       ),
                     ],
                   ),
