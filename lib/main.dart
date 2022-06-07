@@ -38,9 +38,14 @@ class DailySlideApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppThemeData.lightThemeData,
       darkTheme: AppThemeData.darkThemeData,
-      // home: HomePageWidget(key: key),
+      home: HomePageWidget(key: key),
       // home: TrainingPageWidget(key: key),
-      home: CalibrationPageWidget(key: key),
+      // home: CalibrationPageWidget(key: key),
+      routes: {
+        '/home'        : (context) => const HomePageWidget(),
+        '/calibration' : (context) => const CalibrationPageWidget(),
+        '/training'    : (context) => const TrainingPageWidget(),
+      },
     );
   }
 }

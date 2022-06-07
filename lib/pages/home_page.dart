@@ -67,8 +67,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
-                  children: const [
-                    Padding(
+                  children: [
+                    const Padding(
                       padding: EdgeInsets.all(5.0),
                       child: ListTile(
                         leading: Icon(
@@ -79,6 +79,19 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       ),
                     ),
                     Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: ListTile(
+                        leading: const Icon(
+                          Icons.settings,
+                          color: AppThemeData.primaryBodyIconColor,
+                        ),
+                        title: const Text("Fit to my screen", style: TextStyle(color: AppThemeData.primaryBodyTextColor),),
+                        onTap: () {
+                          Navigator.pushNamed(context, '/calibration');
+                        },
+                      ),
+                    ),
+                    const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: ListTile(
                         leading: Icon(

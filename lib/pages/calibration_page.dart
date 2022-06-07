@@ -171,6 +171,7 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
                               });
                             } : () {
                               debugPrint("Configuration finished!");
+                              Navigator.pop(context);
                             },
                             icon: const Icon(Icons.arrow_forward_ios),
                             label: _currentPage == _lastPage ? const Text("FINISH") : const Text("NEXT"),
