@@ -289,3 +289,70 @@ class _LockPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
+
+class PatternPadStatic extends StatelessWidget {
+  /// Count of points horizontally and vertically.
+  final int dimension;
+
+  /// Padding of points area relative to distance between points.
+  final double relativePadding;
+
+  /// Color of selected points.
+  final Color? selectedColor;
+
+  /// Color of not selected points.
+  final Color notSelectedColor;
+
+  /// Radius of points.
+  final double pointRadius;
+
+  /// Width of stroke
+  final double strokeWidth;
+
+  /// Whether show user's input and highlight selected points.
+  final bool showInput;
+
+  // Needed distance from input to point to select point.
+  final int selectThreshold;
+
+  // Whether fill points.
+  final bool fillPoints;
+
+  /// Pattern to show statically
+  final List<int> pattern;
+
+  /// Creates [PatternPadStatic] with given params.
+  const PatternPadStatic({
+    Key? key,
+    this.dimension = 3,
+    this.relativePadding = 0.7,
+    this.selectedColor, // Theme.of(context).primaryColor if null
+    this.notSelectedColor = Colors.black45,
+    this.pointRadius = 10,
+    this.strokeWidth = 2,
+    this.showInput = true,
+    this.selectThreshold = 25,
+    this.fillPoints = false,
+    this.pattern = const [],
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: _LockPainter(
+        dimension: dimension,
+        used: pattern,
+        relativePadding: relativePadding,
+        selectedColor: selectedColor ?? Theme.of(context).primaryColor,
+        notSelectedColor: notSelectedColor,
+        pointRadius: pointRadius,
+        strokeWidth: strokeWidth,
+        showInput: showInput,
+        fillPoints: fillPoints,
+        showDiameter: false,
+        showInterdistance: false,
+      ),
+      size: Size.infinite,
+    );
+  }
+}

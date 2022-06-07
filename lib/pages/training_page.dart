@@ -68,11 +68,20 @@ class _TrainingPageWidgetState extends State<TrainingPageWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
+                          const SizedBox(
                             height: 100,
                             width: 100,
-                            decoration: const BoxDecoration(
-                                color: Colors.red, shape: BoxShape.rectangle),
+                            child: PatternPadStatic(
+                              dimension: 3,
+                              relativePadding: 1,
+                              selectedColor: AppThemeData.patternDotSelectedColor,
+                              notSelectedColor: AppThemeData.patternDotNotSelectedColor,
+                              pointRadius: 11.25,
+                              strokeWidth: 10,
+                              showInput: true,
+                              fillPoints: true,
+                              pattern: [7, 6, 3, 0, 4, 1, 5],
+                            ),
                           ),
                           const SizedBox(
                             child: Text("Pattern 8/12"),
@@ -130,8 +139,7 @@ class _TrainingPageWidgetState extends State<TrainingPageWidget> {
                       dimension: 3,
                       relativePadding: 1,
                       selectedColor: AppThemeData.patternDotSelectedColor,
-                      notSelectedColor:
-                          AppThemeData.patternDotNotSelectedColor,
+                      notSelectedColor: AppThemeData.patternDotNotSelectedColor,
                       pointRadius: 31.25,
                       strokeWidth: 10,
                       showInput: true,
