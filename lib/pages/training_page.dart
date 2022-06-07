@@ -63,91 +63,101 @@ class _TrainingPageWidgetState extends State<TrainingPageWidget> {
                           'Instructions Instructions Instructions Instructions Instructions Instructions Instructions Instructions Instructions Instructions Instructions Instructions Instructions Instructions Instructions Instructions ',
                         ),
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: PatternPadStatic(
-                              dimension: 3,
-                              relativePadding: 1,
-                              selectedColor: AppThemeData.patternDotSelectedColor,
-                              notSelectedColor: AppThemeData.patternDotNotSelectedColor,
-                              pointRadius: 11.25,
-                              strokeWidth: 10,
-                              showInput: true,
-                              fillPoints: true,
-                              pattern: [7, 6, 3, 0, 4, 1, 5],
-                            ),
-                          ),
-                          const SizedBox(
-                            child: Text("Pattern 8/12"),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              var mediaQuery = MediaQuery.of(context);
-                              var physicalPixelWidth = mediaQuery.size.width *
-                                  mediaQuery.devicePixelRatio;
-                              var physicalPixelHeight = mediaQuery.size.height *
-                                  mediaQuery.devicePixelRatio;
-                              debugPrint(
-                                  "mediaQuery.size.width is ${mediaQuery.size.width}");
-                              debugPrint(
-                                  "physicalPixelWidth is $physicalPixelWidth");
-                              debugPrint(
-                                  "mediaQuery.size.height is ${mediaQuery.size.height}");
-                              debugPrint(
-                                  "physicalPixelHeight is $physicalPixelHeight");
-                              debugPrint(
-                                  "mediaQuery.devicePixelRatio is ${mediaQuery.devicePixelRatio}");
-                            },
-                            child: const Text("SHOW ME", style: TextStyle(color: Colors.white),)),
-                          Text(_currentSliderValue.toStringAsFixed(2), style: const TextStyle(color: Colors.white),),
-                        ],
-                      ),
-                      Builder(
-                        builder: (context) {
-                          return Slider(
-                            value: _currentSliderValue,
-                            max: 3.0,
-                            min: 0.0,
-                            label: _currentSliderValue.toStringAsFixed(2),
-                            onChanged: (double value) {
-                              var patternModel = context.read<PatternModel>();
-                              patternModel.padding = value;
-                              setState(() {
-                                _currentSliderValue = value;
-                              });
-                            }
-                          );
-                        }
-                      ),
                     ],
                   ),
                 ),
                 Expanded(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: PatternPad(
-                      dimension: 3,
-                      relativePadding: 1,
-                      selectedColor: AppThemeData.patternDotSelectedColor,
-                      notSelectedColor: AppThemeData.patternDotNotSelectedColor,
-                      pointRadius: 31.25,
-                      strokeWidth: 10,
-                      showInput: true,
-                      fillPoints: true,
-                      showDiameter: true,
-                      showInterdistance: true,
-                      onInputComplete: (List<int> pattern) =>
-                          debugPrint("pattern is ${pattern.toString()}}"),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width*2/3,
+                        ),
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: PatternPadStatic(
+                            dimension: 3,
+                            relativePadding: 1,
+                            selectedColor: AppThemeData.patternDotSelectedColor,
+                            notSelectedColor: AppThemeData.patternDotNotSelectedColor,
+                            pointRadius: 14,
+                            strokeWidth: 7,
+                            showInput: true,
+                            fillPoints: true,
+                            pattern: [7, 6, 3, 0, 4, 1, 5],
+                          ),
+                        ),
+                      ),
+                      const Text("Pattern 8/12")
+                    ],
+                  ),
+                ),
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        var mediaQuery = MediaQuery.of(context);
+                        var physicalPixelWidth = mediaQuery.size.width *
+                            mediaQuery.devicePixelRatio;
+                        var physicalPixelHeight = mediaQuery.size.height *
+                            mediaQuery.devicePixelRatio;
+                        debugPrint(
+                            "mediaQuery.size.width is ${mediaQuery.size.width}");
+                        debugPrint(
+                            "physicalPixelWidth is $physicalPixelWidth");
+                        debugPrint(
+                            "mediaQuery.size.height is ${mediaQuery.size.height}");
+                        debugPrint(
+                            "physicalPixelHeight is $physicalPixelHeight");
+                        debugPrint(
+                            "mediaQuery.devicePixelRatio is ${mediaQuery.devicePixelRatio}");
+                      },
+                      child: const Text("SHOW ME", style: TextStyle(color: Colors.white),)),
+                    Text(_currentSliderValue.toStringAsFixed(2), style: const TextStyle(color: Colors.white),),
+                  ],
+                ),
+                // Builder(
+                //   builder: (context) {
+                //     return Slider(
+                //       value: _currentSliderValue,
+                //       max: 3.0,
+                //       min: 0.0,
+                //       label: _currentSliderValue.toStringAsFixed(2),
+                //       onChanged: (double value) {
+                //         var patternModel = context.read<PatternModel>();
+                //         patternModel.padding = value;
+                //         setState(() {
+                //           _currentSliderValue = value;
+                //         });
+                //       }
+                //     );
+                //   }
+                // ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: MediaQuery.of(context).size.width - 16,
+                      minHeight: MediaQuery.of(context).size.width - 16,
+                    ),
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: PatternPad(
+                        dimension: 3,
+                        relativePadding: 1,
+                        selectedColor: AppThemeData.patternDotSelectedColor,
+                        notSelectedColor: AppThemeData.patternDotNotSelectedColor,
+                        pointRadius: 31.25,
+                        strokeWidth: 10,
+                        showInput: true,
+                        fillPoints: true,
+                        showDiameter: false,
+                        showInterdistance: false,
+                        onInputComplete: (List<int> pattern) =>
+                            debugPrint("pattern is ${pattern.toString()}}"),
+                      ),
                     ),
                   ),
                 ),
