@@ -71,20 +71,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     const Padding(
                       padding: EdgeInsets.all(5.0),
                       child: ListTile(
-                        leading: Icon(
-                          Icons.settings,
-                          color: AppThemeData.primaryBodyIconColor,
-                        ),
+                        leading: Icon(Icons.settings, color: AppThemeData.primaryBodyIconColor,),
                         title: Text("Settings", style: TextStyle(color: AppThemeData.primaryBodyTextColor),),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: ListTile(
-                        leading: const Icon(
-                          Icons.settings,
-                          color: AppThemeData.primaryBodyIconColor,
-                        ),
+                        leading: const Icon(Icons.settings, color: AppThemeData.primaryBodyIconColor,),
                         title: const Text("Fit to my screen", style: TextStyle(color: AppThemeData.primaryBodyTextColor),),
                         onTap: () {
                           Navigator.pushNamed(context, '/calibration');
@@ -94,10 +88,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: ListTile(
-                        leading: Icon(
-                          Icons.arrow_back,
-                          color: AppThemeData.primaryBodyIconColor,
-                        ),
+                        leading: Icon(Icons.arrow_back, color: AppThemeData.primaryBodyIconColor,),
                         title: Text('Close', style: TextStyle(color: AppThemeData.primaryBodyTextColor),),
                       ),
                     ),
@@ -155,7 +146,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            debugPrint('Button pressed ...');
+                            debugPrint('Training Button pressed ...');
+                            Navigator.pushNamed(context, '/training');
                           },
                           child: const Text('Daily Training'),
                           style: _buttonStyle,

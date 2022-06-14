@@ -47,7 +47,7 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: ChangeNotifierProvider(
-            create: (context) => PatternModel(),
+            create: (context) => PatternModel()..init(),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -56,19 +56,19 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
                 Expanded(
                   flex: 6,
                   child: SizedBox.square(
-                    child: PatternPad(
-                      dimension: 3,
-                      relativePadding: 1,
-                      selectedColor: AppThemeData.patternDotSelectedColor,
-                      notSelectedColor: AppThemeData.patternDotNotSelectedColor,
-                      pointRadius: 31.25,
-                      strokeWidth: 10,
-                      showInput: true,
-                      fillPoints: true,
-                      showDiameter: _currentPage==0,
-                      showInterdistance: _currentPage==1,
-                      onInputComplete: (List<int> pattern) =>
-                          debugPrint("pattern is ${pattern.toString()}}"),
+                    child: Consumer(
+                      builder: (context, patternModel, child) {
+                        return PatternPadStatic(
+                          dimension: 3,
+                          selectedColor: AppThemeData.patternDotSelectedColor,
+                          notSelectedColor: AppThemeData.patternDotNotSelectedColor,
+                          strokeWidth: 10,
+                          pointRadius: context.watch<PatternModel>().radius,
+                          relativePadding: context.watch<PatternModel>().padding,
+                          showInput: context.watch<PatternModel>().toShowDiameter,
+                          showInterdistance: context.watch<PatternModel>().toShowInterdistance,
+                        );
+                      }
                     ),
                   ),
                 ),

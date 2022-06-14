@@ -98,12 +98,6 @@ class PatternPad extends StatefulWidget {
   // Whether fill points.
   final bool fillPoints;
 
-  // Whether show a line indicating the diameter of circle
-  final bool showDiameter;
-
-  // Whether show a line indicating the interdistance between two adjascent circle
-  final bool showInterdistance;
-
   /// Callback that called when user's input complete. Called if user selected one or more points.
   final Function(List<int>) onInputComplete;
 
@@ -118,9 +112,7 @@ class PatternPad extends StatefulWidget {
     this.strokeWidth = 2,
     this.showInput = true,
     this.selectThreshold = 25,
-    this.fillPoints = false,
-    this.showDiameter = false,
-    this.showInterdistance = false,
+    this.fillPoints = true,
     required this.onInputComplete,
   }) : super(key: key);
 
@@ -166,26 +158,22 @@ class _PatternPadState extends State<PatternPad> {
           }
         });
       },
-      child: Consumer<PatternModel> (
-        builder: (context, patternModel, child) {
-          return CustomPaint(
-            painter: _LockPainter(
-              dimension: widget.dimension,
-              used: used,
-              currentPoint: currentPoint,
-              relativePadding: patternModel.padding,
-              selectedColor: widget.selectedColor ?? Theme.of(context).primaryColor,
-              notSelectedColor: widget.notSelectedColor,
-              pointRadius: patternModel.radius,
-              strokeWidth: widget.strokeWidth,
-              showInput: widget.showInput,
-              fillPoints: widget.fillPoints,
-              showDiameter: widget.showDiameter,
-              showInterdistance: widget.showInterdistance,
-            ),
-            size: Size.infinite,
-          );
-        }
+      child: CustomPaint(
+        painter: _LockPainter(
+          dimension: widget.dimension,
+          used: used,
+          currentPoint: currentPoint,
+          relativePadding: widget.relativePadding,
+          selectedColor: widget.selectedColor ?? Theme.of(context).primaryColor,
+          notSelectedColor: widget.notSelectedColor,
+          pointRadius: widget.pointRadius,
+          strokeWidth: widget.strokeWidth,
+          showInput: widget.showInput,
+          fillPoints: widget.fillPoints,
+          showDiameter: false,
+          showInterdistance: false,
+        ),
+        size: Size.infinite,
       ),
     );
   }
@@ -318,6 +306,12 @@ class PatternPadStatic extends StatelessWidget {
   // Whether fill points.
   final bool fillPoints;
 
+  // Whether show a line indicating the diameter of circle
+  final bool showDiameter;
+
+  // Whether show a line indicating the interdistance between two adjascent circle
+  final bool showInterdistance;
+
   /// Pattern to show statically
   final List<int> pattern;
 
@@ -332,7 +326,9 @@ class PatternPadStatic extends StatelessWidget {
     this.strokeWidth = 2,
     this.showInput = true,
     this.selectThreshold = 25,
-    this.fillPoints = false,
+    this.fillPoints = true,
+    this.showDiameter = false,
+    this.showInterdistance = false,
     this.pattern = const [],
   }) : super(key: key);
 
@@ -349,8 +345,8 @@ class PatternPadStatic extends StatelessWidget {
         strokeWidth: strokeWidth,
         showInput: showInput,
         fillPoints: fillPoints,
-        showDiameter: false,
-        showInterdistance: false,
+        showDiameter: showDiameter,
+        showInterdistance: showInterdistance,
       ),
       size: Size.infinite,
     );
