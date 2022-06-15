@@ -4,6 +4,7 @@ import 'package:daily_slide/models/pattern_model.dart';
 import 'package:flutter/material.dart';
 import 'package:daily_slide/themes/app_theme.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:daily_slide/constants.dart' as constants;
 import 'package:daily_slide/widgets/pattern_pad.dart';
 import 'package:provider/provider.dart';
 
@@ -21,8 +22,12 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
   int _currentPage = 0;
   final int _lastPage = 1;
 
-  double _diameterSliderValue = 30.0;
-  double _interDistanceSliderValue = 1.0;
+  static const double diameterSliderMin = 10.0;
+  static const double diameterSliderMax = 50.0;
+  static const double interdistanceSliderMin = 0.1;
+  static const double interdistanceSliderMax = 3.0;
+  double _diameterSliderValue = constants.defaultPointRadius;
+  double _interdistanceSliderValue = interdistanceSliderMax - constants.defaultRelativePadding;
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +92,8 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
                           Builder(
                             builder: (context) {
                               return Slider(
-                                min: 10.0,
-                                max: 50.0,
+                                min: diameterSliderMin,
+                                max: diameterSliderMax,
                                 value: _diameterSliderValue,
                                 onChanged: (double value) {
                                   var patternModel = context.read<PatternModel>();
@@ -108,14 +113,14 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
                           Builder(
                             builder: (context) {
                               return Slider(
-                                min: 0.1,
-                                max: 4.0,
-                                value: _interDistanceSliderValue,
+                                min: 0,
+                                max: interdistanceSliderMax - interdistanceSliderMin,
+                                value: _interdistanceSliderValue,
                                 onChanged: (double value) {
                                   var patternModel = context.read<PatternModel>();
-                                  patternModel.padding = value;
+                                  patternModel.padding = interdistanceSliderMax - value;
                                   setState(() {
-                                    _interDistanceSliderValue = value;
+                                    _interdistanceSliderValue = value;
                                   });
                                 },
                               );
