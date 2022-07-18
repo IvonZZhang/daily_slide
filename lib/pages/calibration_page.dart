@@ -84,7 +84,12 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
                     // Disable page navigation via swipe
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      Column( // Page 1: Diameter
+                      Column( // Page 1: Intro
+                        children: [
+                          const Text("Please take a ruler and follow the instructions to fit the pattern to the size of your screen."),
+                        ],
+                      ),
+                      Column( // Page 2: Diameter
                         // mainAxisSize: MainAxisSize.min,
                         // crossAxisAlignment: Cross,
                         children: [
@@ -107,7 +112,7 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
                           )
                         ],
                       ),
-                      Column( // Page 2: Inter-distance
+                      Column( // Page 3: Inter-distance
                         children: [
                           const Text("Please adjust the distance to 1.3 cm."),
                           Builder(
@@ -126,12 +131,6 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
                               );
                             }
                           )
-                        ],
-                      ),
-                      Column( // Page 3: Something else
-                        children: [
-                          const Text("Please adjust something else."),
-                          Slider(value: 1, onChanged: (double value) {})
                         ],
                       ),
                     ],
@@ -155,6 +154,14 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
                               setState(() {
                                 _currentPage--;
                               });
+                              var patternModel = context.read<PatternModel>();
+                              if (_currentPage == 0) {
+                                patternModel.toShowInterdistance = false;
+                                patternModel.toShowDiameter = false;
+                              } else if (_currentPage == 1) {
+                                patternModel.toShowInterdistance = false;
+                                patternModel.toShowDiameter = true;
+                              }
                             } : null,
                             icon: const Icon(Icons.arrow_back_ios),
                             label: const Text("PREVIOUS"),
@@ -174,6 +181,14 @@ class _CalibrationPageWidgetState extends State<CalibrationPageWidget> {
                               setState(() {
                                 _currentPage++;
                               });
+                              var patternModel = context.read<PatternModel>();
+                              if (_currentPage == 1) {
+                                patternModel.toShowInterdistance = false;
+                                patternModel.toShowDiameter = true;
+                              } else if (_currentPage == 2) {
+                                patternModel.toShowInterdistance = true;
+                                patternModel.toShowDiameter = false;
+                              }
                             } : () {
                               debugPrint("Configuration finished!");
                               Navigator.pop(context);

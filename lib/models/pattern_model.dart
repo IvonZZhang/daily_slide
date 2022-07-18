@@ -7,15 +7,15 @@ class PatternModel extends ChangeNotifier {
 
   double relativePadding = constants.defaultRelativePadding;
   double pointRadius = constants.defaultPointRadius;
-  bool   showDiameter = false;
-  bool   showInterdistance = false;
+  bool   showDiameter = constants.defaultShowDiameter;
+  bool   showInterdistance = constants.defaultShowInterdistance;
 
   void init() async {
     final prefs = await SharedPreferences.getInstance();
     relativePadding = prefs.getDouble(constants.userRelativePadding) ?? constants.defaultRelativePadding;
     pointRadius = prefs.getDouble(constants.userPointRadius) ?? constants.defaultPointRadius;
-    showDiameter = prefs.getBool('userShowDiameter') ?? false;
-    showInterdistance = prefs.getBool('userInterdistance') ?? false;
+    showDiameter = prefs.getBool('userShowDiameter') ?? constants.defaultShowDiameter;
+    showInterdistance = prefs.getBool('userInterdistance') ?? constants.defaultShowInterdistance;
     notifyListeners();
   }
 
